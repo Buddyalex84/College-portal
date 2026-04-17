@@ -1,0 +1,88 @@
+{
+  "theme": "light",
+  "archetype": "4 (Swiss & High-Contrast)",
+  "vibe": "Authority, Clarity, Functional Beauty. Uncompromisingly clean, corporate, and data-forward. No fluff.",
+  "colors": {
+    "background": "bg-zinc-50",
+    "surface": "bg-white",
+    "border": "border-zinc-200",
+    "primary": "bg-[#0047AB] text-white",
+    "primary_hover": "hover:bg-[#003380] hover:text-white",
+    "secondary": "bg-zinc-900 text-white",
+    "accent_red": "text-red-600 bg-red-50",
+    "accent_green": "text-emerald-700 bg-emerald-50",
+    "text_main": "text-zinc-900",
+    "text_muted": "text-zinc-500",
+    "sidebar_bg": "bg-zinc-950",
+    "sidebar_text": "text-zinc-400",
+    "sidebar_active": "bg-zinc-900 text-white border-l-2 border-[#0047AB]"
+  },
+  "typography": {
+    "font_family_heading": "Cabinet Grotesk, sans-serif",
+    "font_family_body": "IBM Plex Sans, sans-serif",
+    "h1": "text-4xl sm:text-5xl font-black tracking-tighter text-zinc-900 leading-none",
+    "h2": "text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900",
+    "h3": "text-xl font-semibold tracking-tight text-zinc-900",
+    "body": "text-base font-normal text-zinc-700 leading-relaxed",
+    "label": "text-xs font-bold uppercase tracking-[0.2em] text-zinc-500",
+    "metric_value": "text-5xl font-black tracking-tighter text-zinc-900",
+    "notice_title": "text-lg font-semibold tracking-tight text-zinc-900"
+  },
+  "spacing_and_layout": {
+    "dashboard_grid": "grid grid-cols-1 md:grid-cols-12 gap-6",
+    "card_padding": "p-6 sm:p-8",
+    "section_spacing": "py-12 sm:py-24",
+    "sidebar_width": "w-64",
+    "container": "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8",
+    "card_style": "bg-white border border-zinc-200 rounded-lg overflow-hidden"
+  },
+  "components": {
+    "button_primary": "inline-flex items-center justify-center px-6 py-3 bg-[#0047AB] text-white font-semibold text-sm rounded-md transition-all duration-200 hover:bg-[#003380] hover:-translate-y-0.5 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-[#0047AB] focus:ring-offset-2",
+    "button_secondary": "inline-flex items-center justify-center px-6 py-3 bg-white border border-zinc-300 text-zinc-900 font-semibold text-sm rounded-md transition-all duration-200 hover:bg-zinc-50 hover:border-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-200 focus:ring-offset-2",
+    "card": "bg-white border border-zinc-200 transition-all duration-200 hover:border-zinc-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)]",
+    "input": "w-full bg-zinc-50 border border-zinc-200 rounded-md px-4 py-3 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0047AB] focus:border-transparent transition-colors",
+    "badge": "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-zinc-100 text-zinc-800",
+    "header": "sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-zinc-200 bg-white/80 backdrop-blur-xl px-4 sm:gap-x-6 sm:px-6 lg:px-8"
+  },
+  "motion_and_interactions": {
+    "hover_lift": "transition-transform duration-200 ease-out hover:-translate-y-1",
+    "page_transition": "animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out",
+    "table_row_hover": "hover:bg-zinc-50 transition-colors cursor-pointer"
+  },
+  "icons_library": "@phosphor-icons/react",
+  "media": {
+    "login_background": {
+      "url": "https://images.pexels.com/photos/15316912/pexels-photo-15316912.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "description": "Elegant modern building at Corda Campus",
+      "placement": "Left side split screen on Login and Registration pages, full height with a 20% black overlay."
+    },
+    "abstract_accent": {
+      "url": "https://images.unsplash.com/photo-1770009971150-f50bc7d373a4?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMjV8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMGdlb21ldHJpYyUyMGFyY2hpdGVjdHVyYWwlMjBsaW5lcyUyMGxpZ2h0fGVufDB8fHx8MTc3NTQxMjE1OHww&ixlib=rb-4.1.0&q=85",
+      "description": "Abstract architectural shapes",
+      "placement": "Used as a subtle banner background in the Student Dashboard welcome card. Set image mix-blend-mode to luminosity or opacity to 10% to keep it strictly professional."
+    },
+    "empty_state": {
+      "url": "https://images.unsplash.com/photo-1760236963218-424a715d1816?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMjh8MHwxfHNlYXJjaHwxfHxzdHVkZW50JTIwc3R1ZHlpbmclMjBtaW5pbWFsaXN0JTIwbW9kZXJufGVufDB8fHx8MTc3NTQxMjE1OHww&ixlib=rb-4.1.0&q=85",
+      "description": "Student studying minimalist",
+      "placement": "Used in empty states (e.g., no pending assignments, no new notices) in a rounded small circular mask or grayscale."
+    }
+  },
+  "specific_page_guidelines": {
+    "dashboard_layout": "Modular UI layout (Control Room Grid). Left sidebar is dark (Zinc-950) with Zinc-400 links and stark white active states. Main content area is Zinc-50. Widgets have 1px borders, NO default drop shadows.",
+    "login_page": "50/50 split layout. Left side: Campus image (login_background) with the university logo overlay. Right side: Minimalist login form centered vertically. Use 'Cabinet Grotesk' for the 'Welcome Back' header. Input fields must have solid focus states.",
+    "student_dashboard": "Top row: 3-4 North Star Metric cards (e.g., 'Attendance', 'Current GPA', 'Due Assignments'). Use the 'abstract_accent' image as a faint background for a 'Welcome' card. Action-Oriented: Next to metrics, show a clear 'Next Action' component.",
+    "notices_viewer": "List layout instead of cards for high density. Use 'IBM Plex Sans'. Left align all text. Unread notices get a Cobalt Blue dot indicator (`bg-[#0047AB] w-2 h-2 rounded-full`).",
+    "timetable": "Strict table format. Columns represent days, rows represent time slots. Current day/time cell highlighted with a faint blue background (`bg-blue-50/50`). No complex card nesting.",
+    "admin_dashboard": "Focus on data density. Use 'Phosphor Icons' (Duotone) for quick recognition. Add a top widget for 'Open Queries' and 'Low Attendance Flags'. Same Swiss high-contrast aesthetic.",
+    "forms_and_submissions": "All forms (Complaint, Assignment upload) must use Shadcn customized inputs. Drag & drop zones for assignments should have a dashed border (`border-dashed border-2 border-zinc-300`) and a slight hover lift."
+  },
+  "accessibility_and_testing": "All interactive elements (buttons, inputs, links, tabs, submit actions) MUST have a `data-testid` attribute. Hover states must be visible. Ensure focus states use `focus:ring-2 focus:ring-[#0047AB]`.",
+  "instructions_to_main_agent": [
+    "Strictly follow the 'Swiss & High-Contrast' archetype.",
+    "Do NOT use standard Shadcn card shadows. Use the flat, bordered style (`border-zinc-200`) and only apply shadow on hover.",
+    "Install and use `@phosphor-icons/react` for all icons.",
+    "Import 'Cabinet Grotesk' (headings) and 'IBM Plex Sans' (body) via Google Fonts or Fontshare, and apply them in tailwind config.",
+    "Do NOT center align dashboard elements unless specified; stick to left alignment for clean data presentation.",
+    "Always use the provided media URLs, NEVER use placeholders."
+  ]
+}
