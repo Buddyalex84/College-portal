@@ -11,13 +11,13 @@ from .serializers import NoticeSerializer
 class NoticeViewSet(viewsets.ModelViewSet):
     queryset = Notice.objects.all()
     serializer_class = NoticeSerializer
-    permission_classes = [AllowAny]  # ✅ allow without login
+    permission_classes = [AllowAny]  
 
     def get_permissions(self):
-        return [AllowAny()]  # ✅ remove admin restriction
+        return [AllowAny()]  
 
     def perform_create(self, serializer):
-        # ✅ DEMO MODE → no user required
+        
         serializer.save(posted_by=None)
 
     @action(detail=False, methods=['get'])

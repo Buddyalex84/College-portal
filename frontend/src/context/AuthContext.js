@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import api from '../api/axios';
 
 const AuthContext = createContext(null);
 
@@ -14,46 +15,43 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // ✅ Load user from localStorage (NO API)
+  // Restore the session on mount: if a JWT is in localStorage, ask the
+  // backend who the current user is.
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+      setLoading(false);
+      return;
     }
-    setLoading(false);
+    api.get('/api/auth/me/')
+      .then(({ data }) => setUser(data))
+      .catch(() => {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        setUser(null);
+      })
+      .finally(() => setLoading(false));
   }, []);
 
-  // ❌ Removed API checkAuth
-
-  // ✅ Simple login (NO API)
   const login = async (username, password) => {
-    const demoUser = {
-      username: username || "demo",
-      role: "student"
-    };
-
-    localStorage.setItem('user', JSON.stringify(demoUser));
-    setUser(demoUser);
-
-    return { user: demoUser };
+    const { data } = await api.post('/api/auth/login/', { username, password });
+    localStorage.setItem('access_token', data.access);
+    localStorage.setItem('refresh_token', data.refresh);
+    setUser(data.user);
+    return data;
   };
 
-  // ✅ Simple register (optional)
   const register = async (userData) => {
-    const newUser = {
-      username: userData.username || "demo",
-      role: "student"
-    };
-
-    localStorage.setItem('user', JSON.stringify(newUser));
-    setUser(newUser);
-
-    return { user: newUser };
+    const { data } = await api.post('/api/auth/register/', userData);
+    localStorage.setItem('access_token', data.access);
+    localStorage.setItem('refresh_token', data.refresh);
+    setUser(data.user);
+    return data;
   };
 
-  // ✅ Logout
   const logout = () => {
-    localStorage.removeItem('user');
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
     setUser(null);
   };
 

@@ -1,49 +1,42 @@
-from rest_framework import viewsets
-from rest_framework.permissions import AllowAny
+from rest_framework import viewsets, permissions
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from .models import Attendance, Timetable
 from .serializers import AttendanceSerializer, TimetableSerializer
+from students.views import IsAdmin
 
 
 # ================= ATTENDANCE =================
 class AttendanceViewSet(viewsets.ModelViewSet):
     queryset = Attendance.objects.all().select_related('student__user')
     serializer_class = AttendanceSerializer
-    permission_classes = [AllowAny]  # ✅ allow without login
-
-    def get_queryset(self):
-        # ✅ DEMO MODE → return all data
-        return self.queryset
 
     def get_permissions(self):
-        return [AllowAny()]  # ✅ remove admin restriction
+        if self.action in ('create', 'update', 'partial_update', 'destroy'):
+            return [IsAuthenticated(), IsAdmin()]
+        return [IsAuthenticated()]
+
+    def get_queryset(self):
+        qs = Attendance.objects.all().select_related('student__user')
+        user = self.request.user
+        if user.is_authenticated and getattr(user, 'role', None) != 'admin':
+            qs = qs.filter(student__user=user)
+        return qs
 
     @action(detail=False, methods=['get'])
     def summary(self, request):
-        # ✅ DEMO MODE → use first student
-        student = None
+        # Summary for the currently logged-in student.
+        user = request.user
+        qs = Attendance.objects.all()
+        if getattr(user, 'role', None) != 'admin':
+            qs = qs.filter(student__user=user)
 
-        try:
-            student = Attendance.objects.first().student
-        except:
-            pass
-
-        if not student:
-            return Response({
-                'total': 0,
-                'present': 0,
-                'absent': 0,
-                'late': 0,
-                'percentage': 0,
-            })
-
-        total = student.attendance.count()
-        present = student.attendance.filter(status='present').count()
-        absent = student.attendance.filter(status='absent').count()
-        late = student.attendance.filter(status='late').count()
-
+        total = qs.count()
+        present = qs.filter(status='present').count()
+        absent = qs.filter(status='absent').count()
+        late = qs.filter(status='late').count()
         return Response({
             'total': total,
             'present': present,
@@ -57,11 +50,8 @@ class AttendanceViewSet(viewsets.ModelViewSet):
 class TimetableViewSet(viewsets.ModelViewSet):
     queryset = Timetable.objects.all()
     serializer_class = TimetableSerializer
-    permission_classes = [AllowAny]  # ✅ allow without login
-
-    def get_queryset(self):
-        # ✅ DEMO MODE → return all timetable
-        return self.queryset
 
     def get_permissions(self):
-        return [AllowAny()]  # ✅ remove admin restriction
+        if self.action in ('create', 'update', 'partial_update', 'destroy'):
+            return [IsAuthenticated(), IsAdmin()]
+        return [IsAuthenticated()]

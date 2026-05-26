@@ -1,45 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import Layout from '../components/Layout';
+import api from '../api/axios';
 
 const Marks = () => {
   const [marks, setMarks] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // ✅ FAKE DEMO MARKS DATA
-    const demoMarks = [
-      {
-        id: 1,
-        subject: "Mathematics",
-        exam_type: "Mid Term",
-        obtained_marks: 42,
-        total_marks: 50
-      },
-      {
-        id: 2,
-        subject: "Physics",
-        exam_type: "Mid Term",
-        obtained_marks: 38,
-        total_marks: 50
-      },
-      {
-        id: 3,
-        subject: "Computer Science",
-        exam_type: "Final",
-        obtained_marks: 85,
-        total_marks: 100
-      },
-      {
-        id: 4,
-        subject: "English",
-        exam_type: "Final",
-        obtained_marks: 78,
-        total_marks: 100
-      }
-    ];
-
-    setMarks(demoMarks);
-    setLoading(false);
+    let cancelled = false;
+    api.get('/api/marks/')
+      .then(({ data }) => { if (!cancelled) setMarks(data); })
+      .catch(() => { if (!cancelled) setMarks([]); })
+      .finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
   }, []);
 
   const getPercentage = (obtained, total) => {
@@ -102,6 +75,9 @@ const Marks = () => {
 
                   </tr>
                 ))}
+                {marks.length === 0 && (
+                  <tr><td colSpan={5} className="px-6 py-6 text-center text-sm text-zinc-500">No marks recorded yet.</td></tr>
+                )}
               </tbody>
 
             </table>

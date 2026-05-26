@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Layout from '../components/Layout';
+import api from '../api/axios';
 import { CalendarCheck, ChartBar, Backpack, CreditCard } from '@phosphor-icons/react';
 
 const StudentDashboard = () => {
@@ -7,30 +8,13 @@ const StudentDashboard = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchStats();
+    let cancelled = false;
+    api.get('/api/dashboard/')
+      .then(({ data }) => { if (!cancelled) setStats(data); })
+      .catch(() => { if (!cancelled) setStats(null); })
+      .finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
   }, []);
-
-  const fetchStats = async () => {
-    try {
-      // ✅ DUMMY DATA (NO API)
-      const data = {
-        attendance_percentage: 60,
-        average_marks: 82,
-        pending_assignments: 2,
-        pending_fees: 1
-      };
-
-      // simulate loading delay (optional)
-      setTimeout(() => {
-        setStats(data);
-        setLoading(false);
-      }, 500);
-
-    } catch (error) {
-      console.error('Error loading stats', error);
-      setLoading(false);
-    }
-  };
 
   const metrics = [
     { label: 'Attendance', value: stats?.attendance_percentage || 0, suffix: '%', icon: CalendarCheck, color: 'emerald' },

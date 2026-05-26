@@ -1,41 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import Layout from '../components/Layout';
+import api from '../api/axios';
 
 const Fees = () => {
   const [fees, setFees] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // ✅ FAKE DEMO FEES DATA
-    const demoFees = [
-      {
-        id: 1,
-        semester: 4,
-        due_date: "2026-05-10",
-        total_amount: 50000,
-        paid_amount: 30000,
-        payment_status: "partial"
-      },
-      {
-        id: 2,
-        semester: 3,
-        due_date: "2025-12-10",
-        total_amount: 50000,
-        paid_amount: 50000,
-        payment_status: "paid"
-      },
-      {
-        id: 3,
-        semester: 5,
-        due_date: "2026-08-15",
-        total_amount: 55000,
-        paid_amount: 0,
-        payment_status: "pending"
-      }
-    ];
-
-    setFees(demoFees);
-    setLoading(false);
+    let cancelled = false;
+    api.get('/api/fees/')
+      .then(({ data }) => { if (!cancelled) setFees(data); })
+      .catch(() => { if (!cancelled) setFees([]); })
+      .finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
   }, []);
 
   const statusColors = {
@@ -61,6 +38,10 @@ const Fees = () => {
           <div className="text-zinc-500">Loading...</div>
         ) : (
           <div className="space-y-4">
+
+            {fees.length === 0 && (
+              <div className="bg-white border rounded-lg p-6 text-center text-sm text-zinc-500">No fee records yet.</div>
+            )}
 
             {fees.map((fee) => (
               <div

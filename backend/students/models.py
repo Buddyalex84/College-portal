@@ -16,6 +16,7 @@ class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='student_profile')
     enrollment_number = models.CharField(max_length=20, unique=True)
     course = models.CharField(max_length=100)
+    year = models.IntegerField(default=1)
     semester = models.IntegerField()
     section = models.CharField(max_length=10, blank=True)
     date_of_birth = models.DateField(null=True, blank=True)

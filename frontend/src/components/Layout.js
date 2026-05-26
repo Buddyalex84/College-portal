@@ -42,6 +42,7 @@ const Layout = ({ children }) => {
     { path: '/admin/notices', icon: Megaphone, label: 'Notices' },
     { path: '/admin/attendance', icon: CalendarCheck, label: 'Attendance' },
     { path: '/admin/marks', icon: ChartBar, label: 'Marks' },
+    { path: '/admin/fees', icon: CreditCard, label: 'Fees' },
     { path: '/admin/assignments', icon: FileText, label: 'Assignments' },
     { path: '/admin/queries', icon: ClipboardText, label: 'Queries' },
   ];

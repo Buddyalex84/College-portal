@@ -6,7 +6,7 @@ from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenRefreshView
 from students.views import (
     StudentViewSet, FeeDetailsViewSet, QueryViewSet, MarksViewSet,
-    register, login, current_user, dashboard_stats
+    login, current_user, profile, dashboard_stats
 )
 from notices.views import NoticeViewSet
 from attendance.views import AttendanceViewSet, TimetableViewSet
@@ -26,10 +26,10 @@ router.register(r'submissions', SubmissionViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/auth/register/', register, name='register'),
     path('api/auth/login/', login, name='login'),
     path('api/auth/me/', current_user, name='current_user'),
     path('api/auth/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/profile/', profile, name='profile'),
     path('api/dashboard/', dashboard_stats, name='dashboard_stats'),
     path('api/chat/', chat, name='chat'),
     path('api/chat/history/', get_chat_history, name='chat_history'),

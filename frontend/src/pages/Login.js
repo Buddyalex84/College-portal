@@ -1,41 +1,24 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
-import { SignIn } from '@phosphor-icons/react';
-import api from '../api/axios'; // ✅ IMPORTANT
+import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      console.log("Login clicked");
-
-      // ✅ CALL BACKEND API
-      const { data } = await api.post('/api/auth/login/', {
-        username,
-        password,
-      });
-
-      // ✅ STORE TOKENS
-      localStorage.setItem('access_token', data.access);
-      localStorage.setItem('refresh_token', data.refresh);
-
-      console.log("Login success");
-
+      await login(username, password);
       toast.success('Login successful!');
-
-      // ✅ REDIRECT
-      window.location.href = "/";
-
+      navigate('/');
     } catch (error) {
-      console.log("ERROR:", error.response?.data);
-
       toast.error(
         error.response?.data?.error || 'Invalid username or password'
       );
@@ -92,11 +75,8 @@ const Login = () => {
             </button>
           </form>
 
-          <p className="mt-6 text-center">
-            Don’t have an account?{' '}
-            <Link to="/register" className="text-blue-600">
-              Register
-            </Link>
+          <p className="mt-6 text-center text-sm text-zinc-500">
+            Don’t have an account? Contact your administrator.
           </p>
         </div>
       </div>

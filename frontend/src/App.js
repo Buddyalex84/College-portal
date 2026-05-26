@@ -1,7 +1,8 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext'; // ✅ ADD BACK
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './context/AuthContext';
 
+import Login from './pages/Login';
 import StudentDashboard from './pages/StudentDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import Profile from './pages/Profile';
@@ -17,24 +18,26 @@ import AdminStudents from './pages/admin/Students';
 import AdminNotices from './pages/admin/Notices';
 import AdminAttendance from './pages/admin/Attendance';
 import AdminMarks from './pages/admin/Marks';
+import AdminFees from './pages/admin/Fees';
 import AdminAssignments from './pages/admin/Assignments';
 import AdminQueries from './pages/admin/Queries';
 
-// 👉 Fake user role for demo
-const userRole = "student";
+// Resolve the landing page based on the authenticated user's role
+function RoleHome() {
+  const { user, loading } = useAuth();
+
+  if (loading) return null;
+  if (!user) return <Navigate to="/login" replace />;
+  return user.role === 'admin' ? <AdminDashboard /> : <StudentDashboard />;
+}
 
 function App() {
   return (
-    <AuthProvider> {/* ✅ VERY IMPORTANT */}
+    <AuthProvider>
       <Routes>
-        <Route
-          path="/"
-          element={
-            userRole === "admin"
-              ? <AdminDashboard />
-              : <StudentDashboard />
-          }
-        />
+        <Route path="/login" element={<Login />} />
+
+        <Route path="/" element={<RoleHome />} />
 
         <Route path="/profile" element={<Profile />} />
         <Route path="/notices" element={<Notices />} />
@@ -49,6 +52,7 @@ function App() {
         <Route path="/admin/notices" element={<AdminNotices />} />
         <Route path="/admin/attendance" element={<AdminAttendance />} />
         <Route path="/admin/marks" element={<AdminMarks />} />
+        <Route path="/admin/fees" element={<AdminFees />} />
         <Route path="/admin/assignments" element={<AdminAssignments />} />
         <Route path="/admin/queries" element={<AdminQueries />} />
       </Routes>

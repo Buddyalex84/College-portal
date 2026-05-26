@@ -1,9 +1,9 @@
 import axios from "axios";
 
-// ✅ Fallback if .env not found
+// Fallback if .env not found
 const API_URL = process.env.REACT_APP_BACKEND_URL || "http://127.0.0.1:8000";
 
-// ✅ Create instance
+//  Create instance
 const api = axios.create({
   baseURL: API_URL,
 });
@@ -13,7 +13,7 @@ api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("access_token");
 
-    // ✅ Attach token if exists
+    // Attach token if exists
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -30,19 +30,19 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    // ✅ If token expired (401)
+    //  If token expired (401)
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
       try {
         const refreshToken = localStorage.getItem("refresh_token");
 
-        // ❌ If no refresh token → logout
+        //  If no refresh token → logout
         if (!refreshToken) {
           throw new Error("No refresh token");
         }
 
-        // ✅ Call refresh API
+        //  Call refresh API
         const { data } = await axios.post(
           `${API_URL}/api/auth/refresh/`,
           {
@@ -50,10 +50,10 @@ api.interceptors.response.use(
           }
         );
 
-        // ✅ Save new token
+        //  Save new token
         localStorage.setItem("access_token", data.access);
 
-        // ✅ Retry original request
+        //  Retry original request
         originalRequest.headers.Authorization = `Bearer ${data.access}`;
         return api(originalRequest);
 

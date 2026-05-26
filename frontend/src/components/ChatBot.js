@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { X, PaperPlaneTilt, Robot, User as UserIcon, Sparkle } from '@phosphor-icons/react';
 import api from '../api/axios';
 import { toast } from 'sonner';
@@ -26,21 +26,21 @@ const ChatBot = () => {
     }
   }, [isOpen]);
 
-  // Load chat history when opened
-  useEffect(() => {
-    if (isOpen && messages.length === 0) {
-      loadChatHistory();
-    }
-  }, [isOpen]);
-
-  const loadChatHistory = async () => {
+  const loadChatHistory = useCallback(async () => {
     try {
       const { data } = await api.get(`/api/chat/history/?session_id=${sessionId}`);
       setMessages(data);
     } catch (error) {
       console.error('Failed to load chat history', error);
     }
-  };
+  }, [sessionId]);
+
+  // Load chat history when opened
+  useEffect(() => {
+    if (isOpen && messages.length === 0) {
+      loadChatHistory();
+    }
+  }, [isOpen, messages.length, loadChatHistory]);
 
   const handleSend = async () => {
     if (!input.trim() || loading) return;

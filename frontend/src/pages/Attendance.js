@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Layout from '../components/Layout';
+import api from '../api/axios';
 
 const Attendance = () => {
   const [attendance, setAttendance] = useState([]);
@@ -7,32 +8,21 @@ const Attendance = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // ✅ FAKE DATA (NO API)
-    const demoAttendance = [
-      { id: 1, date: "2026-04-01", subject: "Mathematics", status: "present" },
-      { id: 2, date: "2026-04-02", subject: "Physics", status: "absent" },
-      { id: 3, date: "2026-04-03", subject: "Computer Science", status: "present" },
-      { id: 4, date: "2026-04-04", subject: "English", status: "late" },
-      { id: 5, date: "2026-04-05", subject: "Mathematics", status: "present" },
-    ];
-
-    const total = demoAttendance.length;
-    const present = demoAttendance.filter(a => a.status === "present").length;
-    const absent = demoAttendance.filter(a => a.status === "absent").length;
-    const late = demoAttendance.filter(a => a.status === "late").length;
-
-    const percentage = total > 0 ? (present / total) * 100 : 0;
-
-    setAttendance(demoAttendance);
-    setSummary({
-      total,
-      present,
-      absent,
-      late,
-      percentage,
-    });
-
-    setLoading(false);
+    let cancelled = false;
+    api.get('/api/attendance/')
+      .then(({ data }) => {
+        if (cancelled) return;
+        setAttendance(data);
+        const total = data.length;
+        const present = data.filter((a) => a.status === 'present').length;
+        const absent = data.filter((a) => a.status === 'absent').length;
+        const late = data.filter((a) => a.status === 'late').length;
+        const percentage = total > 0 ? (present / total) * 100 : 0;
+        setSummary({ total, present, absent, late, percentage });
+      })
+      .catch(() => { if (!cancelled) { setAttendance([]); setSummary({ total: 0, present: 0, absent: 0, late: 0, percentage: 0 }); } })
+      .finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
   }, []);
 
   const statusColors = {
@@ -116,6 +106,9 @@ const Attendance = () => {
 
                     </tr>
                   ))}
+                  {attendance.length === 0 && (
+                    <tr><td colSpan={3} className="px-6 py-6 text-center text-sm text-zinc-500">No attendance records yet.</td></tr>
+                  )}
                 </tbody>
 
               </table>
